@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Contact Manager</h1>
+    <table style="width:100%">
+        <tr>
+            <th>
+                <h3>Create Contact</h3>
+                <form id="create-contact" method="post" action="http://localhost:11845/api/contact">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="FirstName" placeholder="First Name" required/>
+                            <input type="text" class="form-control" name="HomeTelephone" placeholder="Home Number" />
+                            <input type="email" class="form-control" name="Email" placeholder="Email" />
+                            <input type="text" class="form-control" name="Address" placeholder="Address" />
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="LastName" placeholder="Last Name" />
+                            <input type="text" class="form-control" name="CellPhone" placeholder="Cell Phone" required/>
+                            <input type="text" class="form-control" name="SkypeName" placeholder="Skype Name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <h3>Edit Contact</h3>
+                <form id="edit-contact" method="post" action="http://localhost:11845/api/contact">
+                    <div class="row">
+                        <div class="col">
+                            <select class="form-control" id="edit-id-dropdown" onchange="GetContact(this)" name="Id">
+                                <option value="0">Select Id</option>
+                            </select>
+                            <input type="text" class="form-control" name="FirstName" placeholder="First Name" required/>
+                            <input type="text" class="form-control" name="HomeTelephone" placeholder="Home Number" />
+                            <input type="text" class="form-control" name="Address" placeholder="Address" />
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="LastName" placeholder="Last Name" />
+                            <input type="text" class="form-control" name="CellPhone" placeholder="Cell Phone" required/>
+                            <input type="email" class="form-control" name="Email" placeholder="Email" />
+                            <input type="text" class="form-control" name="SkypeName" placeholder="Skype Name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </th>
+        </tr>
+    </table>
+
+    <table style="width:100%" id="data-table">
+        <tr>
+            <th>Id</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Home Number</th>
+            <th>Cell Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Skype Name</th>
+            <th></th>
+        </tr>
+    </table>
+</div>
