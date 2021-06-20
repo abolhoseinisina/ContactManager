@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Interface
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        public ICollection<TEntity> List();
-        public TEntity Get(object id);
-        public void Insert(TEntity entity);
-        public void Delete(object id);
-        public void Update(TEntity entityToUpdate);
+        public Task<ICollection<TEntity>> List();
+        public Task<TEntity> Get(object id);
+        public Task Insert(TEntity entity);
+        public Task Delete(object id);
+        public Task Update(TEntity entityToUpdate);
     }
 }

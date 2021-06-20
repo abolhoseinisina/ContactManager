@@ -21,35 +21,60 @@ namespace ContactManager.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ICollection<Contact>> List()
+        public async Task<ActionResult<ICollection<Contact>>> List()
         {
-            return Ok(contactService.List());
+            var contactList = await contactService.List();
+            if (contactList.Count != 0) return Ok(contactList);
+            return NotFound("There are no contacts");
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Contact> Get(int id)
+        public async Task<ActionResult<Contact>> Get(int id)
         {
-            return Ok(contactService.Get(id));
+            var contact = await contactService.Get(id);
+            if (contact != null) return Ok(contact);
+            return NotFound("Could not find a contact with this id: " + id);
         }
 
         [HttpPost]
-        public ActionResult Create([FromForm] Contact contact)
+        public async Task<ActionResult> Create([FromForm] Contact contact)
         {
-            contactService.Create(contact);
+            try
+            {
+                await contactService.Create(contact);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
             return Ok();
         }
 
         [HttpPut]
-        public ActionResult Update([FromForm] Contact contact)
+        public async Task<ActionResult> Update([FromForm] Contact contact)
         {
-            contactService.Update(contact);
+            try
+            {
+                await contactService.Update(contact);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
             return Ok();
         }
 
         [HttpDelete]
-        public ActionResult Delete([FromForm] int id)
+        public async Task<ActionResult> Delete([FromForm] int id)
         {
-            contactService.Delete(id);
+            try
+            {
+                await contactService.Delete(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
             return Ok();
         }
     }

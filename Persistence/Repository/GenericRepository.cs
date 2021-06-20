@@ -1,8 +1,10 @@
 ﻿using Application.Interface;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
@@ -17,32 +19,55 @@ namespace Persistence.Repository
             dbSet = context.Set<TEntity>();
         }
 
-        public virtual ICollection<TEntity> List()
+        public virtual async Task<ICollection<TEntity>> List()
         {
             //return dbSet.FromSqlRaw("GetContacts").ToList();
-            return dbSet.ToList();
+            return await dbSet.ToListAsync();
         }
 
-        public virtual TEntity Get(object id)
+        public virtual async Task<TEntity> Get(object id)
         {
-            return dbSet.Find(id);
+            return await dbSet.FindAsync(id);
         }
 
-        public virtual void Insert(TEntity entity)
+        public virtual async Task Insert(TEntity entity)
         {
-            dbSet.Add(entity);
+            try
+            {
+                await dbSet.AddAsync(entity);
+            }
+            catch
+            {
+                throw new InvalidOperationException("Error adding entity to DB.");
+            }
         }
 
-        public virtual void Delete(object id)
+        public virtual async Task Delete(object id)
         {
-            TEntity entityToDelete = dbSet.Find(id);
-            dbSet.Remove(entityToDelete);
+            TEntity entityToDelete = await dbSet.FindAsync(id);
+            if (entityToDelete == null) throw new InvalidOperationException("Could not find an entity with this id: " + id);
+            try
+            {
+                dbSet.Remove(entityToDelete);
+            }
+            catch
+            {
+                throw new InvalidOperationException("Error deleting entity from DB.");
+            }
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public virtual async Task Update(TEntity entityToUpdate)
         {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            try
+            {
+                dbSet.Attach(entityToUpdate);
+                context.Entry(entityToUpdate).State = EntityState.Modified;
+            }
+            catch
+            {
+                throw new InvalidOperationException("Error updating entity in the DB.");
+            }
+            await Task.CompletedTask;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Persistence.Context;
 using Persistence.Repository;
 using System;
+using System.Threading.Tasks;
 
 namespace Persistence
 {
@@ -16,9 +17,16 @@ namespace Persistence
             ContactRepository = new ContactRepository(this.context);
         }
 
-        public void Save()
+        public async Task Save()
         {
-            context.SaveChanges();
+            try
+            {
+                await context.SaveChangesAsync(); 
+            }
+            catch
+            { 
+                throw new InvalidOperationException("Error saving data to DB."); 
+            }
         }
 
         public void Dispose()

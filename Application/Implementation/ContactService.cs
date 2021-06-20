@@ -3,6 +3,7 @@ using Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Implementation
 {
@@ -15,32 +16,34 @@ namespace Application.Implementation
             this.unitOfWork = unitOfWork;
         }
 
-        public void Create(Contact contact)
+        public async Task Create(Contact contact)
         {
-            unitOfWork.ContactRepository.Insert(contact);
-            unitOfWork.Save();
+            if (contact.Id != 0) throw new InvalidOperationException("Do not include id in your request.");
+            await unitOfWork.ContactRepository.Insert(contact);
+            await unitOfWork.Save();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            unitOfWork.ContactRepository.Delete(id);
-            unitOfWork.Save();
+            await unitOfWork.ContactRepository.Delete(id);
+            await unitOfWork.Save();
         }
 
-        public Contact Get(int id)
+        public async Task<Contact> Get(int id)
         {
-            return unitOfWork.ContactRepository.Get(id);
+            return await unitOfWork.ContactRepository.Get(id);
         }
 
-        public ICollection<Contact> List()
+        public async Task<ICollection<Contact>> List()
         {
-            return unitOfWork.ContactRepository.List();
+            return await unitOfWork.ContactRepository.List();
         }
 
-        public void Update(Contact contact)
+        public async Task Update(Contact contact)
         {
-            unitOfWork.ContactRepository.Update(contact);
-            unitOfWork.Save();
+            //if (await Get(contact.Id) == null) throw new InvalidOperationException("Could not find an entity with this id: " + contact.Id);
+            await unitOfWork.ContactRepository.Update(contact);
+            await unitOfWork.Save();
         }
     }
 }
