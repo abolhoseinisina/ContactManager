@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Application.Interface
 {
     public interface IUnitOfWork : IDisposable
     {
         public IContactRepository ContactRepository { get;}
-        public void Save();
+        public Task Save();
     }
 }
