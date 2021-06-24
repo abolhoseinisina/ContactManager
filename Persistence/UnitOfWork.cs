@@ -10,10 +10,10 @@ namespace Persistence
         private readonly ContactContext context;
         public IContactRepository ContactRepository { get; }
 
-        public UnitOfWork(ContactContext context)
+        public UnitOfWork(ContactContext context, IContactRepository contactRepository)
         {
             this.context = context;
-            ContactRepository = new ContactRepository(this.context);
+            ContactRepository = contactRepository;
         }
 
         public void Save()
